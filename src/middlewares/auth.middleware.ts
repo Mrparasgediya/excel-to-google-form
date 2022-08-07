@@ -1,10 +1,10 @@
 import { NextApiHandler, NextApiResponse } from "next";
 import { OAuth2Client } from "google-auth-library";
 import { JwtPayload } from "jsonwebtoken";
-import { VerifiedJWTPayload } from "../types/jwt.types";
-import { AuthNextApiRequest } from "../types/req.types";
 import { getOAuthClient } from "../utils/google";
 import { verifyJWT } from "../utils/jwt";
+import { VerifiedJWTPayload } from "types/jwt.types";
+import { AuthNextApiRequest } from "types/req.types";
 
 const authMiddleware = async (req: AuthNextApiRequest, res: NextApiResponse, next: NextApiHandler) => {
     try {

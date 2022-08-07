@@ -1,6 +1,6 @@
 import { sign, verify } from 'jsonwebtoken'
-import config from '../config'
-import { VerifiedJWTPayload } from '../types/jwt.types'
+import config from '@config'
+import { VerifiedJWTPayload } from 'types/jwt.types'
 
 export const signJWT = (token: string) => sign({
     token,

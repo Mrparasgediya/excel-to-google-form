@@ -13,8 +13,19 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": "src",
+    "paths": {
+      "@middlewares/*":  ["middlewares/*"],
+      "@styles/*": ["styles/*"],
+      "@utils/*": ["utils/*"],
+      "@config": ["config.ts"],
+    },
+    "typeRoots": [
+      "src/types",
+      "node_modules/@types"
+    ]
   },
   "include": ["next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }
