@@ -5,7 +5,15 @@ const Container: FC<{ children: ChildrenComponent; classes?: string }> = ({
   children,
   classes,
 }) => {
-  return <div className={`w-8/12 mx-auto ${classes || ""}`}>{children}</div>;
+  return (
+    <div
+      className={`${
+        classes && classes.includes("w-") ? "" : "w-8/12"
+      } mx-auto ${classes || ""}`}
+    >
+      {children}
+    </div>
+  );
 };
 
 export default Container;

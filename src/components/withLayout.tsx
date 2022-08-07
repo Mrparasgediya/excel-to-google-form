@@ -3,7 +3,10 @@ import React, { Fragment, useContext, useEffect } from "react";
 import Container from "./Container";
 import Navbar from "./Navbar";
 
-const withLayout = <P extends object>(Component: React.ComponentType<P>) => {
+const withLayout = <P extends object>(
+  Component: React.ComponentType<P>,
+  containerStyles: string = ""
+) => {
   return (props: P) => {
     const {
       actions: { setToken },
@@ -21,7 +24,11 @@ const withLayout = <P extends object>(Component: React.ComponentType<P>) => {
     return (
       <Fragment>
         <Navbar />
-        <Container classes="mt-8">
+        <Container
+          classes={`${!containerStyles.includes("mt-") ? "mt-8" : ""} ${
+            containerStyles || ""
+          }`}
+        >
           <Component {...props} />
         </Container>
       </Fragment>

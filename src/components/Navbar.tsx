@@ -1,13 +1,18 @@
 import Button from "./Button";
 import NextLink from "next/link";
 import Container from "./Container";
-import { MouseEventHandler, useContext, useState } from "react";
+import { Fragment, MouseEventHandler, useContext, useState } from "react";
 import TokenContext from "contexts/Token/TokenContext";
+import { NextRouter, useRouter } from "next/router";
+import ButtonLink from "./ButtonLink";
+
 const Navbar = () => {
   const {
     state: { token },
     actions: { setToken },
   } = useContext(TokenContext);
+
+  const { asPath }: NextRouter = useRouter();
 
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
 
@@ -28,25 +33,28 @@ const Navbar = () => {
       setIsLoggingOut(false);
     }
   };
-
   return (
     <nav className="h-14 bg-white/75 backdrop-blur-lg flex items-center justify-center shadow-md shadow-blue-500/20">
       <Container classes={`flex items-center justify-between`}>
         <h1 className="font-semibold text-xl">
-          Excel To Google Form Converter
+          <NextLink href="/">Excel To Google Form Converter</NextLink>
         </h1>
-        {!!token ? (
-          <Button
-            isLoading={isLoggingOut}
-            loadingText="Logging out"
-            onClick={handleLogoutClick}
-          >
-            Log Out
-          </Button>
+        {!asPath.endsWith("login") ? (
+          !!token ? (
+            <Button
+              isLoading={isLoggingOut}
+              loadingText="Logging out"
+              onClick={handleLogoutClick}
+            >
+              Log Out
+            </Button>
+          ) : (
+            <ButtonLink href="/login">
+              <Button>Log in</Button>
+            </ButtonLink>
+          )
         ) : (
-          <Button>
-            <NextLink href="/login">Log in</NextLink>
-          </Button>
+          <Fragment />
         )}
       </Container>
     </nav>
