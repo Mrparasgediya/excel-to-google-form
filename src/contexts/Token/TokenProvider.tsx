@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { ChildrenComponent } from "types/components.types";
-import TokenContext, {
+import TokenContext from "./TokenContext";
+import {
   ITokenContextActions,
   TokenContextType,
-} from "./TokenContext";
+} from "types/context/token.context.types";
 
 const TokenContextProvider: FC<{ children: ChildrenComponent }> = ({
   children,
