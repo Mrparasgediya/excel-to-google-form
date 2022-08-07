@@ -2,8 +2,8 @@ import { serialize } from "cookie";
 import { OAuth2Client } from "google-auth-library";
 import { GetTokenResponse } from "google-auth-library/build/src/auth/oauth2client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getOAuthClient, getTokenFromCode } from "@utils/google";
-import { signJWT } from "@utils/jwt";
+import { getOAuthClient, getTokenFromCode } from "utils/google";
+import { signJWT } from "utils/jwt";
 
 
 const authRedirectGetHandler = async (req: NextApiRequest, res: NextApiResponse) => {

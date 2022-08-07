@@ -1,9 +1,9 @@
 import { NextApiResponse } from "next"
 import https from 'https'
 import { serialize } from 'cookie'
-import authMiddleware from "@middlewares/auth.middleware";
+import authMiddleware from "middlewares/auth.middleware";
 import { AuthNextApiRequest } from "types/req.types";
-import { runMiddleware } from "@utils/middleware";
+import { runMiddleware } from "utils/middleware";
 
 const logoutGetRequestHandler = async (req: AuthNextApiRequest, res: NextApiResponse) => {
     try {

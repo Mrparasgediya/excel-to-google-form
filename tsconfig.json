@@ -16,10 +16,11 @@
     "incremental": true,
     "baseUrl": "src",
     "paths": {
-      "@middlewares/*":  ["middlewares/*"],
-      "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@config": ["config.ts"],
+      "middlewares/*":  ["middlewares/*"],
+      "styles/*": ["styles/*"],
+      "utils/*": ["utils/*"],
+      "config": ["config.ts"],
+      "contexts/*": ["contexts/*"],
     },
     "typeRoots": [
       "src/types",
