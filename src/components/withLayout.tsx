@@ -7,18 +7,24 @@ const withLayout = <P extends object>(
   Component: React.ComponentType<P>,
   containerStyles: string = ""
 ) => {
-  return (props: P) => {
+  return (props: P & { token: string }) => {
     const {
       actions: { setToken },
     } = useContext(TokenContext);
 
     useEffect(() => {
-      (async () => {
-        const { token } = await (
-          await fetch("http://localhost:3000/api/auth/token")
-        ).json();
-        setToken(token);
-      })();
+      if (props.token) {
+        // set token if we get token from server
+        setToken(props.token);
+      } else {
+        // get token from server and set to it
+        (async () => {
+          const { token } = await (
+            await fetch("http://localhost:3000/api/auth/token")
+          ).json();
+          setToken(token);
+        })();
+      }
     }, []);
 
     return (
