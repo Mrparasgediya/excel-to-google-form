@@ -1,8 +1,21 @@
-const LoadingSpinner = () => {
+import { FC } from "react";
+
+interface ILoadingSpinnerProps {
+  size?: "small" | "medium" | "large" | "extraLarge";
+}
+const LoadingSpinner: FC<ILoadingSpinnerProps> = ({ size }) => {
   return (
     <svg
       role="status"
-      className="inline w-6 object-contain text-white animate-spin"
+      className={`inline ${
+        size && size == "small"
+          ? "w-4"
+          : size === "large"
+          ? "w-10"
+          : size === "extraLarge"
+          ? "w-14"
+          : "w-6"
+      } object-contain text-white animate-spin`}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

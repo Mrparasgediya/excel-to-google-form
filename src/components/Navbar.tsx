@@ -12,7 +12,7 @@ const Navbar = () => {
     actions: { setToken },
   } = useContext(TokenContext);
 
-  const { asPath }: NextRouter = useRouter();
+  const { asPath, push }: NextRouter = useRouter();
 
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
 
@@ -25,9 +25,9 @@ const Navbar = () => {
           Authorization: `Barear ${token}`,
         },
       });
-      console.log(await data.json());
       setToken(undefined);
       setIsLoggingOut(false);
+      push("/");
     } catch (error) {
       console.log(error);
       setIsLoggingOut(false);

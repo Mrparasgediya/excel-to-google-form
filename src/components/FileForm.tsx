@@ -12,9 +12,10 @@ import FileInput from "./FileInput";
 
 const FileForm = () => {
   const {
-    actions: { setCurrentStep, setFileData },
+    state: { isLoading },
+    actions: { setCurrentStep, setFileData, toggelIsLoading },
   } = useContext(FileContext);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [isValidFormSubmit, setIsValidFormSubmit] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -25,7 +26,7 @@ const FileForm = () => {
       const selectedFile = fileInputRef.current.files[0];
       const formdata = new FormData();
       formdata.append("image", selectedFile);
-      setIsLoading(true);
+      toggelIsLoading();
       try {
         const res = await fetch("http://localhost:3000/api/file/upload", {
           body: formdata,
@@ -36,9 +37,9 @@ const FileForm = () => {
         setFileData(fileData);
         setCurrentStep("change");
       } catch (error) {
-        console.log("i am herer", error);
+        console.log(error);
       }
-      setIsLoading(false);
+      toggelIsLoading();
     } else {
     }
   };

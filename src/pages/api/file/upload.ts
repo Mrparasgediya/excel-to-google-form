@@ -18,7 +18,6 @@ const fileUploadGetHandler = async (req: FileNextApiRequest, res: NextApiRespons
         const readOutput = readWorksheet(workSheet);
         return res.send({ readOutput });
     } catch (error) {
-        console.log(error);
         return res.status(400).send({ message: (error as Error).message })
     }
 }

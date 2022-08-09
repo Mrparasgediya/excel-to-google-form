@@ -10,22 +10,22 @@ const FileContextProvider: FC<{ children: any }> = ({ children }) => {
   const defaultFormDetails = {
     documentTitle: "",
     title: "",
+    formId: "",
+    formUrl: "",
   };
   const [currentStep, setCurrentStep] =
     useState<fileContextCurrentSteps>("upload");
   const [fileData, setFileData] = useState<IFormItem[]>([]);
   const [formDetails, setFormDetails] =
     useState<IFormDetails>(defaultFormDetails);
-
-  // setting setting for development of change
-  useEffect(() => {
-    setCurrentStep("upload");
-    setFileData([]);
-  }, []);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const actions: IFileContextActions = {
     setCurrentStep(currentStep) {
       setCurrentStep(currentStep);
+    },
+    toggelIsLoading() {
+      setIsLoading((prevState) => !prevState);
     },
     setFileData(fileData) {
       setFileData(fileData);
@@ -42,7 +42,10 @@ const FileContextProvider: FC<{ children: any }> = ({ children }) => {
 
   return (
     <FileContext.Provider
-      value={{ state: { currentStep, fileData, formDetails }, actions }}
+      value={{
+        state: { currentStep, fileData, formDetails, isLoading },
+        actions,
+      }}
     >
       {children}
     </FileContext.Provider>
