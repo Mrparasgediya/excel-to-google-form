@@ -37,14 +37,18 @@ const logoutGetRequestHandler = async (req: AuthNextApiRequest, res: NextApiResp
 
         postReq.write(postData);
         postReq.end();
-
-        res.setHeader('Set-Cookie', serialize('token', '', {
-            expires: new Date(0),
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            path: '/'
-        }))
+        res.setHeader(
+            "Set-Cookie",
+            [
+                serialize("token", "", {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'strict',
+                    maxAge: 0,
+                    path: "/",
+                })
+            ]
+        );
         return res.send({ message: "Logout Successfully" });
     } catch (error) {
         return res.send({ message: (error as Error).message })
@@ -54,7 +58,7 @@ const logoutGetRequestHandler = async (req: AuthNextApiRequest, res: NextApiResp
 
 const logoutHandler = (req: AuthNextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
-        case 'GET':
+        case 'POST':
             return logoutGetRequestHandler(req, res);
         default:
             return res.status(405).send({ message: `Method ${req.method} is not Allowed!` })

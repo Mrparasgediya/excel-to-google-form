@@ -2,6 +2,7 @@ import TokenContext from "contexts/token/TokenContext";
 import React, { Fragment, useContext, useEffect } from "react";
 import Container from "./Container";
 import Navbar from "./Navbar";
+import config from "config";
 
 const withLayout = <P extends object>(
   Component: React.ComponentType<P>,
@@ -20,9 +21,7 @@ const withLayout = <P extends object>(
         // get token from server and set to it
         (async () => {
           const { token } = await (
-            await fetch(
-              `https://excel-to-google-form.vercel.app/api/auth/token`
-            )
+            await fetch(`${config.FETCH_BASE_URL}/api/auth/token`)
           ).json();
           setToken(token);
         })();

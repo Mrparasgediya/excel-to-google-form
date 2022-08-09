@@ -5,6 +5,7 @@ import GoogleIcon from "components/GoogleIcon";
 import withLayout from "components/withLayout";
 import TokenContext from "contexts/token/TokenContext";
 import ButtonLink from "components/ButtonLink";
+import { NextPage } from "next";
 
 const LogInPage: NextPage = () => {
   const {

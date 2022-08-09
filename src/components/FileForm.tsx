@@ -1,3 +1,4 @@
+import config from "config";
 import FileContext from "contexts/file/FileContext";
 import {
   ChangeEvent,
@@ -28,13 +29,10 @@ const FileForm = () => {
       formdata.append("image", selectedFile);
       toggelIsLoading();
       try {
-        const res = await fetch(
-          `https://excel-to-google-form.vercel.app/api/file/upload`,
-          {
-            body: formdata,
-            method: "POST",
-          }
-        );
+        const res = await fetch(`${config.FETCH_BASE_URL}/api/file/upload`, {
+          body: formdata,
+          method: "POST",
+        });
         const response = await res.json();
         const fileData: IFormItem[] = response.readOutput;
         setFileData(fileData);

@@ -4,7 +4,7 @@ import { VerifiedJWTPayload } from 'types/jwt.types'
 
 export const signJWT = (token: string) => sign({
     token,
-}, config.JWT_SECRET, { expiresIn: "8hr" })
+}, config.JWT_SECRET, { expiresIn: "1hr" })
 
 
 export const verifyJWT = (jwt: string): VerifiedJWTPayload => verify(jwt, config.JWT_SECRET)

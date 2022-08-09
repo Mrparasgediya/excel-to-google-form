@@ -5,6 +5,7 @@ import { Fragment, MouseEventHandler, useContext, useState } from "react";
 import TokenContext from "contexts/token/TokenContext";
 import { NextRouter, useRouter } from "next/router";
 import ButtonLink from "./ButtonLink";
+import config from "config";
 
 const Navbar = () => {
   const {
@@ -20,10 +21,11 @@ const Navbar = () => {
     try {
       setIsLoggingOut(true);
       // logout from server and revoke all access of this application
-      await fetch(`https://excel-to-google-form.vercel.app/api/auth/logout`, {
+      await fetch(`${config.FETCH_BASE_URL}/api/auth/logout`, {
         headers: {
           Authorization: `Barear ${token}`,
         },
+        method: "POST",
       });
       setToken(undefined);
       setIsLoggingOut(false);

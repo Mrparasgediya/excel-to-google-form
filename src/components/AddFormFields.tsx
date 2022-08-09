@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import Button from "./Button";
 import ButtonLink from "./ButtonLink";
 import LoadingSpinner from "./LoadingSpinner";
+import config from "config";
 
 const AddFormFields = () => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
@@ -26,18 +27,15 @@ const AddFormFields = () => {
   const handleAddFieldClick = async () => {
     try {
       toggelIsLoading();
-      const res = await fetch(
-        `https://excel-to-google-form.vercel.app/api/form/${formId}/fields`,
-        {
-          method: "PUT",
-          body: JSON.stringify({ fields: fileData }),
-          headers: new Headers({
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Barear ${token}`,
-          }),
-        }
-      );
+      await fetch(`${config.FETCH_BASE_URL}/api/form/${formId}/fields`, {
+        method: "PUT",
+        body: JSON.stringify({ fields: fileData }),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Barear ${token}`,
+        }),
+      });
       toggelIsLoading();
       setIsCompleted(true);
     } catch (error) {
