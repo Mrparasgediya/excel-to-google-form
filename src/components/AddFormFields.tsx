@@ -1,6 +1,6 @@
 import FileContext, { IFileContext } from "contexts/file/FileContext";
 import TokenContext from "contexts/token/TokenContext";
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "./Button";
 import ButtonLink from "./ButtonLink";
 import LoadingSpinner from "./LoadingSpinner";
