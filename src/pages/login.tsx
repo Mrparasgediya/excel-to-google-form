@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import { NextRouter, useRouter } from "next/router";
 import { Fragment, useContext, useEffect, useState } from "react";
 import Button from "components/Button";
@@ -6,6 +6,7 @@ import GoogleIcon from "components/GoogleIcon";
 import withLayout from "components/withLayout";
 import TokenContext from "contexts/token/TokenContext";
 import ButtonLink from "components/ButtonLink";
+import config from "config";
 
 const LogInPage: NextPage = () => {
   const {
@@ -44,3 +45,10 @@ const LogInPage: NextPage = () => {
 };
 
 export default withLayout(LogInPage, "w-80 h-40 mt-24 glass glass--white");
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {
+      baseFetchUrl: config.FETCH_BASE_URL,
+    },
+  };
+};

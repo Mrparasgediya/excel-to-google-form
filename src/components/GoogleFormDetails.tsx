@@ -1,3 +1,4 @@
+import FetchUrlContext from "contexts/fetchUrl/FetchUrlContext";
 import FileContext, {
   IFileContext,
   IFormDetails,
@@ -31,6 +32,8 @@ const GoogleFormDetails = () => {
     actions: { setFormDetails, setCurrentStep },
   } = useContext<IFileContext>(FileContext);
 
+  const { baseFetchUrl } = useContext(FetchUrlContext);
+
   const handleCreteGoogleFormSubmit: FormEventHandler<HTMLFormElement> = async (
     e
   ) => {
@@ -43,7 +46,7 @@ const GoogleFormDetails = () => {
         toggelIsLoading();
         if (!documentTitle || !title)
           throw new Error("Enter valid form details");
-        const res = await fetch("http://localhost:3000/api/form/create", {
+        const res = await fetch(`${baseFetchUrl}/api/form/create`, {
           method: "POST",
           body: JSON.stringify({
             title: title,

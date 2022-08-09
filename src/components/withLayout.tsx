@@ -1,3 +1,4 @@
+import FetchUrlContext from "contexts/fetchUrl/FetchUrlContext";
 import TokenContext from "contexts/token/TokenContext";
 import React, { Fragment, useContext, useEffect } from "react";
 import Container from "./Container";
@@ -7,12 +8,17 @@ const withLayout = <P extends object>(
   Component: React.ComponentType<P>,
   containerStyles: string = ""
 ) => {
-  return (props: P & { token: string }) => {
+  return (props: P & { token: string; baseFetchUrl: string }) => {
     const {
       actions: { setToken },
     } = useContext(TokenContext);
 
+    const { baseFetchUrl, setBaseFetchUrl } = useContext(FetchUrlContext);
+
     useEffect(() => {
+      if (props.baseFetchUrl) {
+        setBaseFetchUrl(props.baseFetchUrl);
+      }
       if (props.token) {
         // set token if we get token from server
         setToken(props.token);
@@ -20,7 +26,7 @@ const withLayout = <P extends object>(
         // get token from server and set to it
         (async () => {
           const { token } = await (
-            await fetch("http://localhost:3000/api/auth/token")
+            await fetch(`${props.baseFetchUrl || baseFetchUrl}/api/auth/token`)
           ).json();
           setToken(token);
         })();

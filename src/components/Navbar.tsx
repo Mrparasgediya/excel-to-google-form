@@ -5,6 +5,7 @@ import { Fragment, MouseEventHandler, useContext, useState } from "react";
 import TokenContext from "contexts/token/TokenContext";
 import { NextRouter, useRouter } from "next/router";
 import ButtonLink from "./ButtonLink";
+import FetchUrlContext from "contexts/fetchUrl/FetchUrlContext";
 
 const Navbar = () => {
   const {
@@ -15,12 +16,13 @@ const Navbar = () => {
   const { asPath, push }: NextRouter = useRouter();
 
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
+  const { baseFetchUrl } = useContext(FetchUrlContext);
 
   const handleLogoutClick: MouseEventHandler<HTMLButtonElement> = async () => {
     try {
       setIsLoggingOut(true);
       // logout from server and revoke all access of this application
-      const data = await fetch("http://localhost:3000/api/auth/logout", {
+      await fetch(`${baseFetchUrl}/api/auth/logout`, {
         headers: {
           Authorization: `Barear ${token}`,
         },

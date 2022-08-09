@@ -1,7 +1,8 @@
 import Button from "components/Button";
 import ButtonLink from "components/ButtonLink";
 import withLayout from "components/withLayout";
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
+import config from "config";
 
 const Home: NextPage = () => {
   return (
@@ -15,3 +16,11 @@ const Home: NextPage = () => {
 };
 
 export default withLayout(Home);
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {
+      baseFetchUrl: config.FETCH_BASE_URL,
+    },
+  };
+};

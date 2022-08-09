@@ -7,6 +7,7 @@ import Button from "components/Button";
 import FormFieldsDetails from "components/FormFieldsDetails";
 import GoogleFormDetails from "components/GoogleFormDetails";
 import AddFormFields from "components/AddFormFields";
+import config from "config";
 
 const ConvertPage: FC<{ token: string }> = ({ token }) => {
   const {
@@ -54,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     props: {
       token,
+      baseFetchUrl: config.FETCH_BASE_URL,
     },
   };
 };
