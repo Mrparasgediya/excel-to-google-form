@@ -6,7 +6,7 @@
   .glass {
     @apply rounded-md shadow-md;
   }
-  .glass-white {
+  .glass--white {
     @apply bg-white/70 border border-white;
   }
   .glass--red {

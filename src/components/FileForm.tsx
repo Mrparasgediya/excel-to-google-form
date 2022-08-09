@@ -1,7 +1,6 @@
 import FileContext from "contexts/file/FileContext";
 import {
-  FC,
-  FormEvent,
+  ChangeEvent,
   FormEventHandler,
   useContext,
   useRef,
@@ -16,6 +15,8 @@ const FileForm = () => {
     actions: { setCurrentStep, setFileData },
   } = useContext(FileContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isValidFormSubmit, setIsValidFormSubmit] = useState<boolean>(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFormSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -25,29 +26,43 @@ const FileForm = () => {
       const formdata = new FormData();
       formdata.append("image", selectedFile);
       setIsLoading(true);
-      const res = await fetch("http://localhost:3000/api/file/upload", {
-        body: formdata,
-        method: "POST",
-      });
-      const response = await res.json();
-      const fileData: IFormItem[] = response.readOutput;
-      setFileData(fileData);
+      try {
+        const res = await fetch("http://localhost:3000/api/file/upload", {
+          body: formdata,
+          method: "POST",
+        });
+        const response = await res.json();
+        const fileData: IFormItem[] = response.readOutput;
+        setFileData(fileData);
+        setCurrentStep("change");
+      } catch (error) {
+        console.log("i am herer", error);
+      }
       setIsLoading(false);
-      setCurrentStep("change");
     } else {
     }
   };
 
   return (
     <form
-      className="glass glass-white py-8 px-2 w-96 flex items-center flex-col gap-4"
+      className="glass glass--white py-8 px-2 w-96 flex items-center flex-col gap-4"
       onSubmit={handleFormSubmit}
     >
       <FileInput
         ref={fileInputRef}
-        inputProps={{ disabled: isLoading, accept: ".xlsx" }}
+        inputProps={{
+          disabled: isLoading,
+          accept: ".xlsx",
+          onChange: (_, isvalidFile: boolean) => {
+            setIsValidFormSubmit(isvalidFile);
+          },
+        }}
       />
-      <Button isLoading={isLoading} loadingText={"Getting File Details"}>
+      <Button
+        isLoading={isLoading}
+        loadingText={"Getting File Details"}
+        disabled={!isValidFormSubmit}
+      >
         Get File Data
       </Button>
     </form>

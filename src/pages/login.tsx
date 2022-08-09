@@ -43,4 +43,4 @@ const LogInPage: NextPage = () => {
   );
 };
 
-export default withLayout(LogInPage, "w-80 h-40 mt-24 glass glass-white");
+export default withLayout(LogInPage, "w-80 h-40 mt-24 glass glass--white");

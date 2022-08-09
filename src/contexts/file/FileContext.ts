@@ -1,15 +1,25 @@
 import { createContext } from "react";
 import { IFormItem } from "types/file";
 
-export type fileContextCurrentSteps = 'upload' | "change"
+export type fileContextCurrentSteps = 'upload' | "change" | "createForm";
+
 export interface IFileContextActions {
     setCurrentStep: (currentStep: fileContextCurrentSteps) => void;
     setFileData: (fileData: IFormItem[]) => void
+    setFormDetails: (formDetails: IFormDetails) => void
+    reset: () => void
 }
+
+export interface IFormDetails {
+    title: string,
+    documentTitle: string;
+}
+
 export interface IFileContext {
     state: {
         currentStep: fileContextCurrentSteps,
         fileData: IFormItem[]
+        formDetails: IFormDetails
     }
     ,
     actions: IFileContextActions
@@ -18,11 +28,14 @@ export interface IFileContext {
 const FileContext = createContext<IFileContext>({
     state: {
         currentStep: 'upload',
-        fileData: []
+        fileData: [],
+        formDetails: { title: '', documentTitle: '' }
     },
     actions: {
         setCurrentStep: () => { },
-        setFileData: () => { }
+        setFileData: () => { },
+        reset: () => { },
+        setFormDetails: () => { },
     }
 })
 

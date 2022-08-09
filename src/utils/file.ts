@@ -2,6 +2,31 @@
 import { dataTypes, IColData, IFormItem } from 'types/file'
 import { WorkSheet } from 'xlsx'
 
+export const fileValidExtensions: string[] = ['.xlsx'];
+
+export const getFullTypeOfFileType = (type: dataTypes) => {
+    switch (type) {
+        case 'b':
+            return 'Boolean';
+        case 'cb':
+            return "Checkbox";
+        case 'd':
+            return "Date";
+        case 'dd':
+            return "Dropdown";
+        case 'n':
+            return "Number";
+        case 'r':
+            return "Radio";
+        case 's':
+            return 'Text';
+        default:
+            return "Invalid";
+    }
+}
+
+
+export const isValidFileAccept = (fileName: string): boolean => fileValidExtensions.some((currentExtension) => fileName.endsWith(currentExtension))
 
 const getArrayMatchesRegEx = (array: string[], regex: RegExp) => array.map(item => {
     const regExArr = item.match(regex)
@@ -31,7 +56,7 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
 
     for (let col of colsArr) {
         data[col] = {}
-        for (let i = firstLineNo; i <= lastLineNo; i++) {
+        for (let i = firstLineNo + 2; i <= lastLineNo; i++) {
             const colNoKey = `${col}${i}`
             if (firstSheet[colNoKey]) {
                 const { t: type, v: value } = firstSheet[colNoKey];
@@ -56,13 +81,13 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         };
     })).map((item: IFormItem): IFormItem => {
         item.title = firstSheet[`${item.col}1`].v;
-        if (firstSheet[`${item.col}2`] && (!(firstSheet[`${item.col}2`].v instanceof Date) && (firstSheet[`${item.col}2`].v.includes('=') && firstSheet[`${item.col}2`].v.includes(';')))) {
+        if (firstSheet[`${item.col}2`]) {
             const extraFields = firstSheet[`${item.col}2`].v.split(";").reduce((obj: { [key: string]: any }, key: string) => {
                 const [innerKey, innerValue] = key.split("=");
                 if (innerKey || innerValue) {
                     return {
                         ...obj,
-                        [innerKey]: innerValue.includes(',') ? innerValue.split(',') : innerValue
+                        [innerKey]: innerValue.includes(',') ? innerValue.split(',') : innerKey === 'v' ? [innerValue] : innerValue
                     }
                 } else {
                     return obj
