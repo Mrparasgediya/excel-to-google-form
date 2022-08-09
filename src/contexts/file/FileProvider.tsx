@@ -13,6 +13,7 @@ const FileContextProvider: FC<{ children: any }> = ({ children }) => {
     formId: "",
     formUrl: "",
   };
+
   const [currentStep, setCurrentStep] =
     useState<fileContextCurrentSteps>("upload");
   const [fileData, setFileData] = useState<IFormItem[]>([]);

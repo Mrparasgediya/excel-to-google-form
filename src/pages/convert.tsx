@@ -20,7 +20,11 @@ const ConvertPage: FC<{ token: string }> = ({ token }) => {
         <h2 className="text-3xl font-medium">Select file to convert</h2>
         <Button
           onClick={reset}
-          disabled={currentStep === "upload" || isLoading}
+          disabled={
+            currentStep === "upload" ||
+            currentStep === "addFormFields" ||
+            isLoading
+          }
         >
           Re Upload
         </Button>

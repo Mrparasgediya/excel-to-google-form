@@ -1,9 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, MouseEvent } from "react";
 import NextLink from "next/link";
 
 const ButtonLink: FC<{
   children: JSX.Element;
   href: string;
+  onClick?: () => void;
   target?: "_blank";
 }> = ({ children, href, ...otherProps }) => {
   return (
