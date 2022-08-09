@@ -4,7 +4,7 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import Button from "components/Button";
 import GoogleIcon from "components/GoogleIcon";
 import withLayout from "components/withLayout";
-import TokenContext from "contexts/Token/TokenContext";
+import TokenContext from "contexts/token/TokenContext";
 import ButtonLink from "components/ButtonLink";
 
 const LogInPage: NextPage = () => {
@@ -43,4 +43,4 @@ const LogInPage: NextPage = () => {
   );
 };
 
-export default withLayout(LogInPage, "w-80 h-40 mt-24 glass");
+export default withLayout(LogInPage, "w-80 h-40 mt-24 glass glass-white");

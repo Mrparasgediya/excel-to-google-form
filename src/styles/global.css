@@ -4,6 +4,12 @@
 
 @layer components {
   .glass {
-    @apply bg-white/70 border border-white rounded-md shadow-md;
+    @apply rounded-md shadow-md;
+  }
+  .glass-white {
+    @apply bg-white/70 border border-white;
+  }
+  .glass--red {
+    @apply bg-red-600/70 border-red-500 text-white;
   }
 }

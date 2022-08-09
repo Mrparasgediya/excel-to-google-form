@@ -1,4 +1,4 @@
-import TokenContext from "contexts/Token/TokenContext";
+import TokenContext from "contexts/token/TokenContext";
 import React, { Fragment, useContext, useEffect } from "react";
 import Container from "./Container";
 import Navbar from "./Navbar";

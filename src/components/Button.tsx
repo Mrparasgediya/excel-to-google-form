@@ -19,7 +19,7 @@ const Button: FC<{
 
   return (
     <button
-      className={`text-white text-md flex items-center gap-1 px-2 py-1 rounded-md font-medium shadow-md transition-all ease-in active:transform active:scale-95 active:shadow ${
+      className={`text-white text-md flex items-center gap-1 px-2 py-1 rounded-md font-medium shadow-md transition-all ease-in active:transform active:scale-95 active:shadow disabled:cursor-not-allowed ${
         classes || ""
       } ${colorStyles}`}
       disabled={!!isLoading}

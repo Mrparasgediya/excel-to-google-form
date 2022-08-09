@@ -4,7 +4,7 @@ import { VerifiedJWTPayload } from 'types/jwt.types'
 
 export const signJWT = (token: string) => sign({
     token,
-    exp: Math.floor(Date.now() / 100) + (60)
+    exp: Math.floor(Date.now() / 100) + (60 * 60 * 8) // 8hr
 }, config.JWT_SECRET)
 
 

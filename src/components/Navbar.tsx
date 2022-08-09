@@ -2,7 +2,7 @@ import Button from "./Button";
 import NextLink from "next/link";
 import Container from "./Container";
 import { Fragment, MouseEventHandler, useContext, useState } from "react";
-import TokenContext from "contexts/Token/TokenContext";
+import TokenContext from "contexts/token/TokenContext";
 import { NextRouter, useRouter } from "next/router";
 import ButtonLink from "./ButtonLink";
 
