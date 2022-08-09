@@ -1,4 +1,3 @@
-import FetchUrlContext from "contexts/fetchUrl/FetchUrlContext";
 import FileContext, {
   IFileContext,
   IFormDetails,
@@ -32,8 +31,6 @@ const GoogleFormDetails = () => {
     actions: { setFormDetails, setCurrentStep },
   } = useContext<IFileContext>(FileContext);
 
-  const { baseFetchUrl } = useContext(FetchUrlContext);
-
   const handleCreteGoogleFormSubmit: FormEventHandler<HTMLFormElement> = async (
     e
   ) => {
@@ -46,18 +43,21 @@ const GoogleFormDetails = () => {
         toggelIsLoading();
         if (!documentTitle || !title)
           throw new Error("Enter valid form details");
-        const res = await fetch(`${baseFetchUrl}/api/form/create`, {
-          method: "POST",
-          body: JSON.stringify({
-            title: title,
-            documentTitle: documentTitle,
-          }),
-          headers: new Headers({
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Barear ${token}`,
-          }),
-        });
+        const res = await fetch(
+          `https://excel-to-google-form.vercel.app/api/form/create`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              title: title,
+              documentTitle: documentTitle,
+            }),
+            headers: new Headers({
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Barear ${token}`,
+            }),
+          }
+        );
         const response = await res.json();
         setFormDetails({
           documentTitle,

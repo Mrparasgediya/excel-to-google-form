@@ -1,4 +1,3 @@
-import FetchUrlContext from "contexts/fetchUrl/FetchUrlContext";
 import FileContext from "contexts/file/FileContext";
 import {
   ChangeEvent,
@@ -18,7 +17,6 @@ const FileForm = () => {
   } = useContext(FileContext);
 
   const [isValidFormSubmit, setIsValidFormSubmit] = useState<boolean>(false);
-  const { baseFetchUrl } = useContext(FetchUrlContext);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -30,10 +28,13 @@ const FileForm = () => {
       formdata.append("image", selectedFile);
       toggelIsLoading();
       try {
-        const res = await fetch(`${baseFetchUrl}/api/file/upload`, {
-          body: formdata,
-          method: "POST",
-        });
+        const res = await fetch(
+          `https://excel-to-google-form.vercel.app/api/file/upload`,
+          {
+            body: formdata,
+            method: "POST",
+          }
+        );
         const response = await res.json();
         const fileData: IFormItem[] = response.readOutput;
         setFileData(fileData);

@@ -55,7 +55,6 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     props: {
       token,
-      baseFetchUrl: config.FETCH_BASE_URL,
     },
   };
 };

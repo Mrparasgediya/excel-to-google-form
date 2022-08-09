@@ -27,7 +27,7 @@ const AddFormFields = () => {
     try {
       toggelIsLoading();
       const res = await fetch(
-        `http://localhost:3000/api/form/${formId}/fields`,
+        `https://excel-to-google-form.vercel.app/api/form/${formId}/fields`,
         {
           method: "PUT",
           body: JSON.stringify({ fields: fileData }),
