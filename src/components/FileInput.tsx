@@ -74,4 +74,6 @@ const FileInput: FC<IFileInputProps> = forwardRef<
   );
 });
 
+FileInput.displayName = "FileInput";
+
 export default FileInput;

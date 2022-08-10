@@ -35,4 +35,6 @@ const FormInput: FC<IFormInputProps> = forwardRef<
   }
 );
 
+FormInput.displayName = "FormInput";
+
 export default FormInput;

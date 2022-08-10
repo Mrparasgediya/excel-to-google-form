@@ -1,5 +1,5 @@
 import TokenContext from "contexts/token/TokenContext";
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { FC, Fragment, useContext, useEffect } from "react";
 import Container from "./Container";
 import Navbar from "./Navbar";
 import config from "config";
@@ -8,7 +8,7 @@ const withLayout = <P extends object>(
   Component: React.ComponentType<P>,
   containerStyles: string = ""
 ) => {
-  return (props: P & { token: string }) => {
+  const MyComponent: FC<P & { token: string }> = (props) => {
     const {
       actions: { setToken },
     } = useContext(TokenContext);
@@ -41,6 +41,8 @@ const withLayout = <P extends object>(
       </Fragment>
     );
   };
+  MyComponent.displayName = "WithLayoutHOC";
+  return MyComponent;
 };
 
 export default withLayout;
