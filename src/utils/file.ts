@@ -56,7 +56,7 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         let newType = undefined;
         // adding extra fields
         if (firstSheet[`${col}2`] && firstSheet[`${col}2`].v && typeof firstSheet[`${col}2`].v === 'string') {
-            const extraData = firstSheet[`${col}2`].v.split(';').reduce((extraFields: { required?: boolean, type?: dataTypes }, currItem: string) => {
+            const extraData = firstSheet[`${col}2`].v.split(';').reduce((extraFields: { required?: boolean, type?: dataTypes, shuffle?: boolean }, currItem: string) => {
 
                 if (currItem.includes('t=')) {
                     const data: { [key: string]: dataTypes } = { 'boolean': 'b', 'checkbox': 'cb', 'date': 'd', "dropdown": 'dd', 'number': 'n', 'radio': 'r', 'text': 's' };
@@ -64,6 +64,9 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
                 }
                 if (currItem === 'required') {
                     extraFields.required = true;
+                }
+                if (currItem === 'shuffle') {
+                    extraFields.shuffle = true;
                 }
                 return extraFields
             }, {})

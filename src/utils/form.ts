@@ -21,14 +21,14 @@ export const getRequestForForm = (testData: IFormItem[]) => {
             question['choiceQuestion'] = {
                 type: 'RADIO',
                 options: item.extra && (item.extra.v).map((item: string) => ({ value: item })),
-                shuffle: false
+                shuffle: item.extra && item.extra.hasOwnProperty('shuffle')
             }
         }
         if (item.type === 'cb') {
             question['choiceQuestion'] = {
                 type: 'CHECKBOX',
                 options: item.extra && (item.extra.v).map((item: string) => ({ value: item })),
-                shuffle: false
+                shuffle: item.extra && item.extra.hasOwnProperty('shuffle')
             }
         }
 
@@ -36,7 +36,7 @@ export const getRequestForForm = (testData: IFormItem[]) => {
             question['choiceQuestion'] = {
                 type: 'DROP_DOWN',
                 options: item.extra && (item.extra.v).map((item: string) => ({ value: item })),
-                shuffle: false
+                shuffle: item.extra && item.extra.hasOwnProperty('shuffle')
             }
         }
 
