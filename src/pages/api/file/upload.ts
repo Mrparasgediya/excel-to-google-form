@@ -1,3 +1,4 @@
+import authMiddleware from "middlewares/auth.middleware";
 import multerMiddleware from "middlewares/multer.middleware";
 import { NextApiResponse } from "next";
 import { FileNextApiRequest } from "types/req.types";
@@ -13,6 +14,7 @@ export const config = {
 
 const fileUploadGetHandler = async (req: FileNextApiRequest, res: NextApiResponse) => {
     try {
+        await runMiddleware(req, res, authMiddleware);
         await runMiddleware(req, res, multerMiddleware.single('image'));
         const workSheet: WorkSheet = XLSX.read(req.file.buffer, { type: "buffer", cellDates: true })
         const readOutput = readWorksheet(workSheet);

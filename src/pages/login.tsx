@@ -18,7 +18,7 @@ const LogInPage: NextPage = () => {
     if (token) {
       router.push("/");
     }
-  }, [token]);
+  }, [token, router]);
 
   return (
     <div className="flex justify-center items-center gap-5 flex-col h-full">

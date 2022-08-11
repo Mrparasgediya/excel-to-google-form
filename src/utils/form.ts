@@ -4,7 +4,8 @@ import { readWorksheet } from "./file";
 export const getRequestForForm = (testData: IFormItem[]) => {
     return (testData.map((item, idx) => {
         const question: { [key: string]: any } = {
-            required: true,
+            // check is field is required or not
+            required: item.extra && item.extra.hasOwnProperty('required')
         }
         if (item.type === 'd') {
             question['dateQuestion'] = {

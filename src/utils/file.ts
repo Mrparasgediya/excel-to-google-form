@@ -1,9 +1,7 @@
-// import { dataTypes, IColData, IFormItem } from 'types/file'
-import { dataTypes, IColData, IFormItem } from 'types/file'
+import { dataTypes, IFormItem } from 'types/file'
 import { WorkSheet } from 'xlsx'
 
 export const fileValidExtensions: string[] = ['.xlsx'];
-
 export const getFullTypeOfFileType = (type: dataTypes) => {
     switch (type) {
         case 'b':
@@ -24,7 +22,6 @@ export const getFullTypeOfFileType = (type: dataTypes) => {
             return "Invalid";
     }
 }
-
 
 export const isValidFileAccept = (fileName: string): boolean => fileValidExtensions.some((currentExtension) => fileName.endsWith(currentExtension))
 
@@ -52,54 +49,111 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
     const [firstLineNo, lastLineNo]: number[] = getArrayMatchesRegEx(columnsArr, /[0-9]+/).map(item => +item!);
     const [firstCol, lastCol] = getArrayMatchesRegEx(columnsArr, /[A-Z]+/);
     const colsArr = getColNames(firstCol?.charCodeAt(0)!, lastCol?.charCodeAt(0)!);
-    const data: IColData = {}
 
+    let arr: { [key: string]: any } = {}
     for (let col of colsArr) {
-        data[col] = {}
+        arr[col] = {}
+        let newType = undefined;
+        // adding extra fields
+        if (firstSheet[`${col}2`] && firstSheet[`${col}2`].v && typeof firstSheet[`${col}2`].v === 'string') {
+            const extraData = firstSheet[`${col}2`].v.split(';').reduce((extraFields: { required?: boolean, type?: dataTypes }, currItem: string) => {
+
+                if (currItem.includes('t=')) {
+                    const data: { [key: string]: dataTypes } = { 'boolean': 'b', 'checkbox': 'cb', 'date': 'd', "dropdown": 'dd', 'number': 'n', 'radio': 'r', 'text': 's' };
+                    extraFields.type = (data[currItem.split("=")[1].toLocaleLowerCase()]);
+                }
+                if (currItem === 'required') {
+                    extraFields.required = true;
+                }
+                return extraFields
+            }, {})
+            if (extraData.hasOwnProperty('type')) {
+                newType = extraData.type
+                delete extraData.type;
+            }
+            if (Object.keys(extraData).length > 0) {
+                arr[col]['extra'] = extraData;
+            }
+
+        }
         for (let i = firstLineNo + 2; i <= lastLineNo; i++) {
             const colNoKey = `${col}${i}`
             if (firstSheet[colNoKey]) {
                 const { t: type, v: value } = firstSheet[colNoKey];
-                data[col][i] = { type, value }
+                arr[col][i] = { type: newType || type, value }
             }
         }
     }
 
-    const colDataWithType: IFormItem[] = (Object.entries(data).map(([colName, colData]): IFormItem => {
-        const typeWithCount = Object.entries(colData).reduce((dataItems: any, [colItemKey, colItemData]) => {
-            if (!dataItems.hasOwnProperty(colItemData.type)) {
-                dataItems[colItemData.type] = 1;
-            } else {
-                dataItems[colItemData.type] = dataItems[colItemData.type] + 1;
-            }
-            return dataItems;
-        }, {});
-        return {
-            col: colName,
-            type: Object.keys(typeWithCount)[0] as dataTypes,
-            count: typeWithCount[Object.keys(typeWithCount)[0]]
-        };
-    })).map((item: IFormItem): IFormItem => {
-        item.title = firstSheet[`${item.col}1`].v;
-        if (firstSheet[`${item.col}2`]) {
-            const extraFields = firstSheet[`${item.col}2`].v.split(";").reduce((obj: { [key: string]: any }, key: string) => {
-                const [innerKey, innerValue] = key.split("=");
-                if (innerKey || innerValue) {
-                    return {
-                        ...obj,
-                        [innerKey]: innerValue.includes(',') ? innerValue.split(',') : innerKey === 'v' ? [innerValue] : innerValue
-                    }
-                } else {
-                    return obj
-                }
-            }, {});
-            if (extraFields.hasOwnProperty('t')) {
-                item.type = extraFields.t === 'radio' ? 'r' : extraFields.t === 'checkbox' ? 'cb' : extraFields.t === 'dropdown' ? 'dd' : item.type;
-                delete extraFields.t;
-            }
-            item.extra = extraFields;
+    const colDataWithType: IFormItem[] = (Object.entries(arr).map(([colName, colData]) => {
+        const formItem: IFormItem = {} as IFormItem;
+        formItem.col = colName;
+        formItem.title = firstSheet[`${colName}1`].v;
+        let extraDataFromFields = {}
+        if (colData.hasOwnProperty('extra')) {
+            extraDataFromFields = colData.extra;
+            delete colData.extra;
         }
-        return item;
-    });
+        const colTypesWithCount: {
+            types?: {
+                [key: string]: number
+            }
+        } = Object.entries(colData).reduce((dataArr: { types?: { [key: string]: number } }, [rowName, rowData]) => {
+            if (!dataArr.hasOwnProperty('types')) {
+                dataArr.types = {};
+            }
+            if (dataArr.types) {
+                if (dataArr.types.hasOwnProperty((rowData as { type: string }).type)) {
+                    dataArr.types[(rowData as { type: string }).type]++;
+                } else {
+                    dataArr.types[(rowData as { type: string }).type] = 1;
+                }
+            }
+            return dataArr
+        }, {});
+
+
+        if (colTypesWithCount.types) {
+            let type, count;
+            if (Object.entries(colTypesWithCount.types).length > 1) {
+                [type, count] = Object.entries(colTypesWithCount.types).sort(([firstType, firstTypeCount], [secondType, secondTypeCount]) => {
+                    if (firstTypeCount > secondTypeCount) return -1;
+                    else return 1;
+                })[0];
+            } else {
+                [type, count] = Object.entries(colTypesWithCount.types)[0]
+            }
+            formItem.type = type as dataTypes;
+            formItem.count = count;
+        }
+
+
+        if (formItem.type == 'r' || formItem.type == 'dd' || formItem.type == 'cb') {
+            const values: any[] = []
+            for (let i = 3; firstSheet[`${colName}${i}`]; i++) {
+                const currCellValue: { v: any } = firstSheet[`${colName}${i}`];
+
+                if (currCellValue.v) {
+                    let currValue: any;
+                    if (typeof currCellValue.v === 'string') {
+                        currValue = currCellValue.v.trim().toLowerCase();
+                        if (values.indexOf(currValue) == -1) {
+                            values.push(currValue);
+                        }
+                    } else {
+                        currValue = currCellValue.v;
+                        if (values.indexOf(currValue) == -1) {
+                            values.push(currValue);
+                        }
+                    }
+                }
+
+            }
+            formItem.extra = { v: values, ...extraDataFromFields }
+        }
+
+        return formItem;
+    }));
+
     return colDataWithType;
 } 

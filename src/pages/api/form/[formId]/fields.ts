@@ -1,6 +1,5 @@
 import authMiddleware from "middlewares/auth.middleware"
 import { NextApiResponse } from "next"
-import { NextResponse } from "next/server"
 import { AuthNextApiRequest } from "types/req.types"
 import { getRequestForForm } from "utils/form"
 import { runMiddleware } from "utils/middleware"

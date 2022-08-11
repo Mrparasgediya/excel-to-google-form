@@ -5,8 +5,13 @@ const ButtonLink: FC<{
   children: JSX.Element;
   href: string;
   onClick?: () => void;
+  classes?: string;
   target?: "_blank";
-}> = ({ children, href, ...otherProps }) => {
+}> = ({ children, classes, href, ...otherProps }) => {
+  if (classes) {
+    (otherProps as { [key: string]: any; className: string }).className =
+      classes;
+  }
   return (
     <NextLink href={href} passHref>
       <a {...otherProps}>{children}</a>
