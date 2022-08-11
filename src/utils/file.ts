@@ -1,4 +1,4 @@
-import { dataTypes, IFormItem } from 'types/file'
+import { dataTypes, IFormExtraFields, IFormItem } from 'types/file'
 import { WorkSheet } from 'xlsx'
 
 export const fileValidExtensions: string[] = ['.xlsx'];
@@ -18,6 +18,8 @@ export const getFullTypeOfFileType = (type: dataTypes) => {
             return "Radio";
         case 's':
             return 'Text';
+        case 'ls':
+            return 'scaleQuestion';
         default:
             return "Invalid";
     }
@@ -56,10 +58,10 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         let newType = undefined;
         // adding extra fields
         if (firstSheet[`${col}2`] && firstSheet[`${col}2`].v && typeof firstSheet[`${col}2`].v === 'string') {
-            const extraData = firstSheet[`${col}2`].v.split(';').reduce((extraFields: { required?: boolean, type?: dataTypes, shuffle?: boolean }, currItem: string) => {
+            const extraData = firstSheet[`${col}2`].v.split(';').reduce((extraFields: IFormExtraFields, currItem: string) => {
 
                 if (currItem.includes('t=')) {
-                    const data: { [key: string]: dataTypes } = { 'boolean': 'b', 'checkbox': 'cb', 'date': 'd', "dropdown": 'dd', 'number': 'n', 'radio': 'r', 'text': 's' };
+                    const data: { [key: string]: dataTypes } = { 'boolean': 'b', 'checkbox': 'cb', 'date': 'd', "dropdown": 'dd', 'number': 'n', 'radio': 'r', 'text': 's', 'linearscale': 'ls' };
                     extraFields.type = (data[currItem.split("=")[1].toLocaleLowerCase()]);
                 }
                 if (currItem === 'required') {
@@ -68,8 +70,24 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
                 if (currItem === 'shuffle') {
                     extraFields.shuffle = true;
                 }
+                if (currItem.includes('scale=')) {
+                    const scaleSplitArr: string[] = currItem.split("=");
+                    const occuranceOfDash = scaleSplitArr[1].match(/\-/g)?.length
+                    if (occuranceOfDash && occuranceOfDash == 1) {
+                        const [firstNo, lastNo] = scaleSplitArr[1].split('-')
+                        if (!isNaN(+firstNo) && !isNaN(+lastNo)) {
+                            extraFields.range = { low: +firstNo, high: +lastNo }
+                        }
+                    }
+                }
+                if (currItem.includes('llabel=')) {
+                    extraFields.lowLabel = (currItem.split("=")[1])
+                }
+                if (currItem.includes('hlabel=')) {
+                    extraFields.highLabel = (currItem.split('=')[1])
+                }
                 return extraFields
-            }, {})
+            }, {});
             if (extraData.hasOwnProperty('type')) {
                 newType = extraData.type
                 delete extraData.type;
@@ -77,7 +95,6 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
             if (Object.keys(extraData).length > 0) {
                 arr[col]['extra'] = extraData;
             }
-
         }
         for (let i = firstLineNo + 2; i <= lastLineNo; i++) {
             const colNoKey = `${col}${i}`
@@ -87,7 +104,6 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
             }
         }
     }
-
     const colDataWithType: IFormItem[] = (Object.entries(arr).map(([colName, colData]) => {
         const formItem: IFormItem = {} as IFormItem;
         formItem.col = colName;
@@ -131,11 +147,10 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         }
 
 
-        if (formItem.type == 'r' || formItem.type == 'dd' || formItem.type == 'cb') {
+        if (formItem.type === 'r' || formItem.type === 'dd' || formItem.type === 'cb' || formItem.type === 'ls') {
             const values: any[] = []
             for (let i = 3; firstSheet[`${colName}${i}`]; i++) {
                 const currCellValue: { v: any } = firstSheet[`${colName}${i}`];
-
                 if (currCellValue.v) {
                     let currValue: any;
                     if (typeof currCellValue.v === 'string') {
@@ -150,11 +165,9 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
                         }
                     }
                 }
-
             }
             formItem.extra = { v: values, ...extraDataFromFields }
         }
-
         return formItem;
     }));
 
