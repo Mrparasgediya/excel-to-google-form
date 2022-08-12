@@ -103,13 +103,18 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
                 arr[col]['extra'] = extraData;
             }
         }
-        for (let i = firstLineNo + 2; i <= lastLineNo; i++) {
-            const colNoKey = `${col}${i}`
-            if (firstSheet[colNoKey]) {
-                const { t: type, v: value } = firstSheet[colNoKey];
-                arr[col][i] = { type: newType || type, value }
+        if (firstSheet[`${col}3`]) {
+            for (let i = firstLineNo + 2; i <= lastLineNo; i++) {
+                const colNoKey = `${col}${i}`
+                if (firstSheet[colNoKey]) {
+                    const { t: type, v: value } = firstSheet[colNoKey];
+                    arr[col][i] = { type: newType || type, value }
+                }
             }
+        } else {
+            arr[col][3] = { type: newType }
         }
+
 
     }
     const colDataWithType: IFormItem[] = (Object.entries(arr).map(([colName, colData]) => {

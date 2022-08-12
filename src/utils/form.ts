@@ -60,6 +60,7 @@ export const getRequestForForm = (testData: IFormItem[]) => {
                 question['scaleQuestion'] = scaleQUestionOptios;
             }
         }
+
         if (item.type === 'mcg') {
             if (item.extra && item.extra.cols && item.extra.v && item.extra.cols.length && item.extra.v.length) {
                 createItem.item.questionGroupItem = {
@@ -109,6 +110,7 @@ export const getRequestForForm = (testData: IFormItem[]) => {
             createItem
         };
     }));
+
 
     return data
 }
