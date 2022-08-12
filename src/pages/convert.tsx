@@ -1,13 +1,12 @@
 import withLayout from "components/withLayout";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import React, { FC, useContext, useEffect } from "react";
+import React, { FC, useContext } from "react";
 import FileForm from "components/FileForm";
 import FileContext, { IFileContext } from "contexts/file/FileContext";
 import Button from "components/Button";
-import FormFieldsDetails from "components/FormFieldsDetails";
+import FormFieldsDetailsList from "components/FormFieldsDetailsList";
 import GoogleFormDetails from "components/GoogleFormDetails";
 import AddFormFields from "components/AddFormFields";
-import config from "config";
 
 const ConvertPage: FC<{ token: string }> = ({ token }) => {
   const {
@@ -31,7 +30,7 @@ const ConvertPage: FC<{ token: string }> = ({ token }) => {
         </Button>
       </div>
       {currentStep === "upload" && <FileForm />}
-      {currentStep === "change" && <FormFieldsDetails />}
+      {currentStep === "change" && <FormFieldsDetailsList />}
       {currentStep === "createForm" && <GoogleFormDetails />}
       {currentStep === "addFormFields" && <AddFormFields />}
     </div>
@@ -43,16 +42,16 @@ export default withLayout(ConvertPage);
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  // const token = ctx.req.cookies.token;
-  // if (!token) {
-  //   return {
-  //     redirect: {
-  //       destination: "/login",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+  const token = ctx.req.cookies.token;
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
   return {
-    props: {},
+    props: { token },
   };
 };

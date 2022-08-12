@@ -19,7 +19,11 @@ export const getFullTypeOfFileType = (type: dataTypes) => {
         case 's':
             return 'Text';
         case 'ls':
-            return 'scaleQuestion';
+            return "Linear Scale";
+        case "mcg":
+            return "Multiple Choice Grid";
+        case 'cg':
+            return "Checkbox Grid";
         default:
             return "Invalid";
     }
@@ -176,7 +180,6 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         if (Object.keys(extraDataFromFields).length || (formItem.extra && Object.keys(formItem.extra).length)) {
             formItem.extra = { ...extraDataFromFields, ...formItem?.extra }
         }
-        console.log(formItem);
         return formItem;
     }));
 

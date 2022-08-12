@@ -1,12 +1,7 @@
 import config from "config";
 import FileContext from "contexts/file/FileContext";
-import {
-  ChangeEvent,
-  FormEventHandler,
-  useContext,
-  useRef,
-  useState,
-} from "react";
+import TokenContext from "contexts/token/TokenContext";
+import { FormEventHandler, useContext, useRef, useState } from "react";
 import { IFormItem } from "types/file";
 import Button from "./Button";
 import FileInput from "./FileInput";
@@ -18,7 +13,9 @@ const FileForm = () => {
   } = useContext(FileContext);
 
   const [isValidFormSubmit, setIsValidFormSubmit] = useState<boolean>(false);
-
+  const {
+    state: { token },
+  } = useContext(TokenContext);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFormSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -26,12 +23,15 @@ const FileForm = () => {
     if (fileInputRef.current && fileInputRef.current.files) {
       const selectedFile = fileInputRef.current.files[0];
       const formdata = new FormData();
-      formdata.append("image", selectedFile);
+      formdata.append("file", selectedFile);
       toggelIsLoading();
       try {
         const res = await fetch(`${config.FETCH_BASE_URL}/api/file/upload`, {
           body: formdata,
           method: "POST",
+          headers: new Headers({
+            Authorization: `Barear ${token}`,
+          }),
         });
         const response = await res.json();
         const fileData: IFormItem[] = response.readOutput;
@@ -54,7 +54,8 @@ const FileForm = () => {
         ref={fileInputRef}
         inputProps={{
           disabled: isLoading,
-          accept: ".xlsx",
+          accept:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
           onChange: (_, isvalidFile: boolean) => {
             setIsValidFormSubmit(isvalidFile);
           },

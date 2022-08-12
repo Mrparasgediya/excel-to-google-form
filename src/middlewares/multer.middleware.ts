@@ -2,7 +2,7 @@ import multer from 'multer'
 
 const multerMiddleware = multer({
     limits: {
-        fileSize: 1024 * 1024 * 2 // 1mb
+        fileSize: 1024 * 1024 * 2 // 2mb
     },
     fileFilter(req, file, callback) {
         const isValidFile: boolean = file.originalname.endsWith('.xlsx') || file.originalname.endsWith('.xls')

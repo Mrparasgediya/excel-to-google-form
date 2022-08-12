@@ -3,15 +3,19 @@ import Button from "./Button";
 import PencilIcon from "./PencilIcon";
 import TrashIcon from "./TrashIcon";
 
-const DynamiOptions: FC<{ options: string[] }> = ({ options }) => {
+const DynamiOptions: FC<{
+  optionsTitle?: string;
+  options: string[];
+  classes?: string;
+}> = ({ options, classes, optionsTitle }) => {
   const [toggle, setToggle] = useState<boolean>(false);
   return (
-    <div className="relative w-60 h-10 ">
+    <div className={`relative w-60 h-10 ${classes || ""}`}>
       <div
         onClick={() => setToggle(!toggle)}
         className="h-10 flex items-center justify-between px-2 cursor-pointer glass glass--white"
       >
-        <span className="text-md">Options</span>
+        <span className="text-md">{optionsTitle || "Options"}</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className={`h-6 w-6 ${
