@@ -24,8 +24,7 @@ const formFieldsPutHandler = async (req: AuthNextApiRequest, res: NextApiRespons
                 "Authorization": `Bearer ${access_token}`
             }
         })
-
-        return res.send({ message: "Form updated successfully!" })
+        return res.send({ message: formRes })
     } catch (error) {
         return res.status(400).send({ message: (error as Error).message })
     }

@@ -59,9 +59,8 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         // adding extra fields
         if (firstSheet[`${col}2`] && firstSheet[`${col}2`].v && typeof firstSheet[`${col}2`].v === 'string') {
             const extraData = firstSheet[`${col}2`].v.split(';').reduce((extraFields: IFormExtraFields, currItem: string) => {
-
                 if (currItem.includes('t=')) {
-                    const data: { [key: string]: dataTypes } = { 'boolean': 'b', 'checkbox': 'cb', 'date': 'd', "dropdown": 'dd', 'number': 'n', 'radio': 'r', 'text': 's', 'linearscale': 'ls' };
+                    const data: { [key: string]: dataTypes } = { 'boolean': 'b', 'checkbox': 'cb', 'date': 'd', "dropdown": 'dd', 'number': 'n', 'radio': 'r', 'text': 's', 'linearscale': 'ls', 'multiplechoicegrid': "mcg" };
                     extraFields.type = (data[currItem.split("=")[1].toLocaleLowerCase()]);
                 }
                 if (currItem === 'required') {
@@ -86,6 +85,10 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
                 if (currItem.includes('hlabel=')) {
                     extraFields.highLabel = (currItem.split('=')[1])
                 }
+                if (currItem.includes('cols=')) {
+                    const colValues = currItem.split('=')[1];
+                    extraFields.cols = colValues.split(',').filter(value => !!value);
+                }
                 return extraFields
             }, {});
             if (extraData.hasOwnProperty('type')) {
@@ -103,6 +106,7 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
                 arr[col][i] = { type: newType || type, value }
             }
         }
+
     }
     const colDataWithType: IFormItem[] = (Object.entries(arr).map(([colName, colData]) => {
         const formItem: IFormItem = {} as IFormItem;
@@ -147,7 +151,7 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         }
 
 
-        if (formItem.type === 'r' || formItem.type === 'dd' || formItem.type === 'cb' || formItem.type === 'ls') {
+        if (formItem.type === 'r' || formItem.type === 'dd' || formItem.type === 'cb' || formItem.type === 'ls' || formItem.type === 'mcg') {
             const values: any[] = []
             for (let i = 3; firstSheet[`${colName}${i}`]; i++) {
                 const currCellValue: { v: any } = firstSheet[`${colName}${i}`];
@@ -166,8 +170,13 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
                     }
                 }
             }
-            formItem.extra = { v: values, ...extraDataFromFields }
+            formItem.extra = { v: values }
         }
+        // add extra fields to any other fields like required
+        if (Object.keys(extraDataFromFields).length || (formItem.extra && Object.keys(formItem.extra).length)) {
+            formItem.extra = { ...extraDataFromFields, ...formItem?.extra }
+        }
+
         return formItem;
     }));
 

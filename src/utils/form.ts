@@ -1,10 +1,20 @@
 import { IFormItem } from "types/file";
 
 export const getRequestForForm = (testData: IFormItem[]) => {
-    return (testData.map((item, idx) => {
+    const data = (testData.map((item, idx) => {
+
+        const createItem: { item: { title: string | undefined, questionItem?: any, questionGroupItem?: any }, location: { index: number } } = {
+            item: {
+                title: item.title,
+            },
+            location: {
+                index: idx
+            }
+        }
+
         const question: { [key: string]: any } = {
             // check is field is required or not
-            required: item.extra && item.extra.hasOwnProperty('required')
+            required: item.extra && item.extra.hasOwnProperty('required') || false
         }
         if (item.type === 'd') {
             question['dateQuestion'] = {
@@ -50,19 +60,35 @@ export const getRequestForForm = (testData: IFormItem[]) => {
                 question['scaleQuestion'] = scaleQUestionOptios;
             }
         }
-
-        return {
-            createItem: {
-                item: {
-                    title: item.title,
-                    questionItem: {
-                        question
+        if (item.type === 'mcg') {
+            if (item.extra && item.extra.cols && item.extra.v && item.extra.cols.length && item.extra.v.length) {
+                createItem.item.questionGroupItem = {
+                    questions: item.extra.v.map(currQuestion => ({
+                        "rowQuestion": {
+                            title: currQuestion
+                        },
+                        required: question.required
+                    })),
+                    grid: {
+                        columns: {
+                            type: 'RADIO',
+                            options: item.extra.cols.map(item => ({ value: item }))
+                        }
                     }
-                },
-                location: {
-                    index: idx
                 }
             }
+        }
+
+        if (item.type !== 'mcg') {
+            createItem.item.questionItem = {
+                question
+            }
+        }
+
+        return {
+            createItem
         };
     }));
+
+    return data
 }
