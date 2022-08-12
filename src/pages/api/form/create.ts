@@ -1,9 +1,7 @@
 import authMiddleware from "middlewares/auth.middleware"
-import { NextApiHandler, NextApiResponse } from "next"
+import { NextApiResponse } from "next"
 import { AuthNextApiRequest } from "types/req.types";
 import { runMiddleware } from "utils/middleware"
-
-
 
 const formPostHandler = async (req: AuthNextApiRequest, res: NextApiResponse) => {
     try {
@@ -28,6 +26,11 @@ const formPostHandler = async (req: AuthNextApiRequest, res: NextApiResponse) =>
             }
         })
         const response = await programmingLanguagesForm.json();
+
+        if (response.error) {
+            throw new Error(response.error.message)
+        }
+
         return res.send(response);
 
     } catch (error) {

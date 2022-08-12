@@ -60,7 +60,7 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         if (firstSheet[`${col}2`] && firstSheet[`${col}2`].v && typeof firstSheet[`${col}2`].v === 'string') {
             const extraData = firstSheet[`${col}2`].v.split(';').reduce((extraFields: IFormExtraFields, currItem: string) => {
                 if (currItem.includes('t=')) {
-                    const data: { [key: string]: dataTypes } = { 'boolean': 'b', 'checkbox': 'cb', 'date': 'd', "dropdown": 'dd', 'number': 'n', 'radio': 'r', 'text': 's', 'linearscale': 'ls', 'multiplechoicegrid': "mcg" };
+                    const data: { [key: string]: dataTypes } = { 'boolean': 'b', 'checkbox': 'cb', 'date': 'd', "dropdown": 'dd', 'number': 'n', 'radio': 'r', 'text': 's', 'linearscale': 'ls', 'multiplechoicegrid': "mcg", 'checkboxgrid': 'cg' };
                     extraFields.type = (data[currItem.split("=")[1].toLocaleLowerCase()]);
                 }
                 if (currItem === 'required') {
@@ -151,7 +151,7 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         }
 
 
-        if (formItem.type === 'r' || formItem.type === 'dd' || formItem.type === 'cb' || formItem.type === 'ls' || formItem.type === 'mcg') {
+        if (formItem.type === 'r' || formItem.type === 'dd' || formItem.type === 'cb' || formItem.type === 'ls' || formItem.type === 'mcg' || formItem.type === 'cg') {
             const values: any[] = []
             for (let i = 3; firstSheet[`${colName}${i}`]; i++) {
                 const currCellValue: { v: any } = firstSheet[`${colName}${i}`];
@@ -176,7 +176,7 @@ export const readWorksheet = (worksheet: WorkSheet): IFormItem[] => {
         if (Object.keys(extraDataFromFields).length || (formItem.extra && Object.keys(formItem.extra).length)) {
             formItem.extra = { ...extraDataFromFields, ...formItem?.extra }
         }
-
+        console.log(formItem);
         return formItem;
     }));
 

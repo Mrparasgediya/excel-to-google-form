@@ -4,9 +4,6 @@ import { AuthNextApiRequest } from "types/req.types"
 import { getRequestForForm } from "utils/form"
 import { runMiddleware } from "utils/middleware"
 
-
-
-
 const formFieldsPutHandler = async (req: AuthNextApiRequest, res: NextApiResponse) => {
     const { formId } = req.query;
     const formFields = req.body.fields;
@@ -17,14 +14,17 @@ const formFieldsPutHandler = async (req: AuthNextApiRequest, res: NextApiRespons
         if (!formFields)
             throw new Error("Enter form fields data");
         const { access_token } = req.auth.credentials;
-        const formRes = await fetch(`https://forms.googleapis.com/v1/forms/${formId}:batchUpdate`, {
+        const formRes: { error?: { message: string }, [key: string]: any } = await fetch(`https://forms.googleapis.com/v1/forms/${formId}:batchUpdate`, {
             method: 'POST',
             body: JSON.stringify({ requests: getRequestForForm(formFields) }),
             headers: {
                 "Authorization": `Bearer ${access_token}`
             }
         })
-        return res.send({ message: formRes })
+        if (formRes.error) {
+            throw new Error(formRes.error.message)
+        }
+        return res.send({ message: "Form fields added successfully!" })
     } catch (error) {
         return res.status(400).send({ message: (error as Error).message })
     }

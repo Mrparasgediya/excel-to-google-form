@@ -79,7 +79,27 @@ export const getRequestForForm = (testData: IFormItem[]) => {
             }
         }
 
-        if (item.type !== 'mcg') {
+
+        if (item.type === 'cg') {
+            if (item.extra && item.extra.cols && item.extra.v && item.extra.cols.length && item.extra.v.length) {
+                createItem.item.questionGroupItem = {
+                    questions: item.extra.v.map(currQuestion => ({
+                        "rowQuestion": {
+                            title: currQuestion
+                        },
+                        required: question.required
+                    })),
+                    grid: {
+                        columns: {
+                            type: 'CHECKBOX',
+                            options: item.extra.cols.map(item => ({ value: item }))
+                        }
+                    }
+                }
+            }
+        }
+
+        if (item.type !== 'mcg' && item.type !== 'cg') {
             createItem.item.questionItem = {
                 question
             }

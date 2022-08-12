@@ -1,4 +1,4 @@
-export type dataTypes = 'b' | 'e' | 'n' | 'd' | 's' | 'z' | 'r' | 'cb' | 'dd' | 'ls' | 'mcg';
+export type dataTypes = 'b' | 'e' | 'n' | 'd' | 's' | 'z' | 'r' | 'cb' | 'dd' | 'ls' | 'mcg' | "cg";
 
 export interface IFormExtraFields { v?: any[], required?: boolean, type?: dataTypes, shuffle?: boolean, range?: { low: number, high: number }, lowLabel?: string, highLabel?: string, cols?: any[] }
 
