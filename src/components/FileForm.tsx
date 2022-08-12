@@ -1,4 +1,5 @@
 import config from "config";
+import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
 import FileContext from "contexts/file/FileContext";
 import TokenContext from "contexts/token/TokenContext";
 import { FormEventHandler, useContext, useRef, useState } from "react";
@@ -11,6 +12,10 @@ const FileForm = () => {
     state: { isLoading },
     actions: { setCurrentStep, setFileData, toggelIsLoading },
   } = useContext(FileContext);
+
+  const {
+    actions: { toggleDisableLogout },
+  } = useContext(DisableLogoutContext);
 
   const [isValidFormSubmit, setIsValidFormSubmit] = useState<boolean>(false);
   const {
@@ -25,6 +30,7 @@ const FileForm = () => {
       const formdata = new FormData();
       formdata.append("file", selectedFile);
       toggelIsLoading();
+      toggleDisableLogout();
       try {
         const res = await fetch(`${config.FETCH_BASE_URL}/api/file/upload`, {
           body: formdata,
@@ -40,6 +46,7 @@ const FileForm = () => {
       } catch (error) {
         console.log(error);
       }
+      toggleDisableLogout();
       toggelIsLoading();
     } else {
     }

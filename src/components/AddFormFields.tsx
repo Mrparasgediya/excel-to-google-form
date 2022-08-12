@@ -5,12 +5,16 @@ import Button from "./Button";
 import ButtonLink from "./ButtonLink";
 import LoadingSpinner from "./LoadingSpinner";
 import config from "config";
+import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
 
 const AddFormFields = () => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const {
     state: { token },
   } = useContext(TokenContext);
+  const {
+    actions: { toggleDisableLogout },
+  } = useContext(DisableLogoutContext);
   const {
     state: { isLoading },
     actions: { toggelIsLoading },
@@ -27,6 +31,8 @@ const AddFormFields = () => {
   const handleAddFieldClick = async () => {
     try {
       toggelIsLoading();
+      toggleDisableLogout();
+
       await fetch(`${config.FETCH_BASE_URL}/api/form/${formId}/fields`, {
         method: "PUT",
         body: JSON.stringify({ fields: fileData }),
@@ -38,9 +44,11 @@ const AddFormFields = () => {
       });
       toggelIsLoading();
       setIsCompleted(true);
+      toggleDisableLogout();
     } catch (error) {
       console.log(error);
       toggelIsLoading();
+      toggleDisableLogout();
     }
   };
   return (

@@ -6,12 +6,16 @@ import TokenContext from "contexts/token/TokenContext";
 import { NextRouter, useRouter } from "next/router";
 import ButtonLink from "./ButtonLink";
 import config from "config";
+import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
 
 const Navbar = () => {
   const {
     state: { token },
     actions: { setToken },
   } = useContext(TokenContext);
+  const {
+    state: { isLogoutDisabled },
+  } = useContext(DisableLogoutContext);
 
   const { asPath, push }: NextRouter = useRouter();
 
@@ -44,6 +48,7 @@ const Navbar = () => {
         {!asPath.endsWith("login") ? (
           !!token ? (
             <Button
+              disabled={isLogoutDisabled}
               isLoading={isLoggingOut}
               loadingText="Logging out"
               onClick={handleLogoutClick}

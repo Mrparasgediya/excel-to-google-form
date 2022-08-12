@@ -1,4 +1,5 @@
 import config from "config";
+import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
 import FileContext, {
   IFileContext,
   IFormDetails,
@@ -19,6 +20,9 @@ const GoogleFormDetails = () => {
   const {
     state: { token },
   } = useContext(TokenContext);
+  const {
+    actions: { toggleDisableLogout },
+  } = useContext(DisableLogoutContext);
   const {
     state: { isLoading },
     actions: { toggelIsLoading },
@@ -42,6 +46,7 @@ const GoogleFormDetails = () => {
       const title: string | undefined = titleInputRef.current.value;
       try {
         toggelIsLoading();
+        toggleDisableLogout();
         if (!documentTitle || !title)
           throw new Error("Enter valid form details");
         const res = await fetch(`${config.FETCH_BASE_URL}/api/form/create`, {
@@ -66,10 +71,12 @@ const GoogleFormDetails = () => {
         titleInputRef.current.value = "";
         documentTitleInputRef.current.value = "";
         toggelIsLoading();
+        toggleDisableLogout();
         setCurrentStep("addFormFields");
       } catch (error) {
         console.log(error);
         toggelIsLoading();
+        toggleDisableLogout();
       }
     }
   };
