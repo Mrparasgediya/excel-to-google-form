@@ -11,7 +11,7 @@ const Home: NextPage = () => {
       <h3 className="font-smibold text-xl">
         Watch Documentation To Prepare Excel File
       </h3>
-      <div className="flex items-center gap-2 border-2">
+      <div className="flex items-center gap-2">
         <ButtonLink
           target="_blank"
           href="https://github.com/Mrparasgediya/excel-to-google-form"
