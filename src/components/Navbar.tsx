@@ -40,7 +40,7 @@ const Navbar = () => {
     }
   };
   return (
-    <nav className="h-14 bg-white/75 backdrop-blur-lg flex items-center justify-center shadow-md shadow-blue-500/20">
+    <nav className="h-14 bg-white/75 backdrop-blur-lg flex items-center justify-center shadow-md shadow-blue-500/20 fixed border-2 w-full top-0 left-0 z-50">
       <Container classes={`flex items-center justify-between`}>
         <h1 className="font-semibold text-xl">
           <NextLink href="/">Excel To Google Form Converter</NextLink>

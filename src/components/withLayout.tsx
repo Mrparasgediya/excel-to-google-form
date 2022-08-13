@@ -32,7 +32,7 @@ const withLayout = <P extends object>(
       <Fragment>
         <Navbar />
         <Container
-          classes={`${!containerStyles.includes("mt-") ? "mt-8" : ""} ${
+          classes={`py-14 ${!containerStyles.includes("mt-") ? "mt-8" : ""} ${
             containerStyles || ""
           }`}
         >
