@@ -1,5 +1,6 @@
 import config from "config";
 import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
+import ErrorContext from "contexts/Error/ErrorContext";
 import FileContext, {
   IFileContext,
   IFormDetails,
@@ -35,6 +36,10 @@ const GoogleFormDetails = () => {
   const {
     actions: { setFormDetails, setCurrentStep },
   } = useContext<IFileContext>(FileContext);
+
+  const {
+    actions: { setErrorMessage },
+  } = useContext(ErrorContext);
 
   const handleCreteGoogleFormSubmit: FormEventHandler<HTMLFormElement> = async (
     e
@@ -74,7 +79,7 @@ const GoogleFormDetails = () => {
         toggleDisableLogout();
         setCurrentStep("addFormFields");
       } catch (error) {
-        console.log(error);
+        setErrorMessage((error as Error).message);
         toggelIsLoading();
         toggleDisableLogout();
       }

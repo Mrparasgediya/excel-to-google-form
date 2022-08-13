@@ -6,6 +6,7 @@ import ButtonLink from "./ButtonLink";
 import LoadingSpinner from "./LoadingSpinner";
 import config from "config";
 import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
+import ErrorContext from "contexts/Error/ErrorContext";
 
 const AddFormFields = () => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
@@ -28,6 +29,10 @@ const AddFormFields = () => {
     actions: { reset },
   } = useContext<IFileContext>(FileContext);
 
+  const {
+    actions: { setErrorMessage },
+  } = useContext(ErrorContext);
+
   const handleAddFieldClick = async () => {
     try {
       toggelIsLoading();
@@ -46,7 +51,7 @@ const AddFormFields = () => {
       setIsCompleted(true);
       toggleDisableLogout();
     } catch (error) {
-      console.log(error);
+      setErrorMessage((error as Error).message);
       toggelIsLoading();
       toggleDisableLogout();
     }

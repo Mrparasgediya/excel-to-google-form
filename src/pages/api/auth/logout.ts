@@ -11,7 +11,6 @@ const logoutGetRequestHandler = async (req: AuthNextApiRequest, res: NextApiResp
         await runMiddleware(req, res, authMiddleware)
         // Build the string for the POST request
         let postData = "token=" + req.auth.credentials.access_token;
-
         // post options to revoke all of the access which are used in this website
         let postOptions = {
             host: 'oauth2.googleapis.com',
@@ -51,7 +50,7 @@ const logoutGetRequestHandler = async (req: AuthNextApiRequest, res: NextApiResp
         );
         return res.send({ message: "Logout Successfully" });
     } catch (error) {
-        return res.send({ message: (error as Error).message })
+        return res.status(400).send({ error: (error as Error).message })
     }
 }
 

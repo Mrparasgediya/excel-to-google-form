@@ -7,6 +7,8 @@ import { NextRouter, useRouter } from "next/router";
 import ButtonLink from "./ButtonLink";
 import config from "config";
 import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
+import ErrorContext from "contexts/Error/ErrorContext";
+import { IFetchResponse } from "types/fetch.types";
 
 const Navbar = () => {
   const {
@@ -20,22 +22,31 @@ const Navbar = () => {
   const { asPath, push }: NextRouter = useRouter();
 
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
+  const {
+    actions: { setErrorMessage },
+  } = useContext(ErrorContext);
 
   const handleLogoutClick: MouseEventHandler<HTMLButtonElement> = async () => {
     try {
       setIsLoggingOut(true);
       // logout from server and revoke all access of this application
-      await fetch(`${config.FETCH_BASE_URL}/api/auth/logout`, {
-        headers: {
-          Authorization: `Barear ${token}`,
-        },
-        method: "POST",
-      });
+      const logoutResponse: IFetchResponse = await fetch(
+        `${config.FETCH_BASE_URL}/api/auth/logout`,
+        {
+          headers: {
+            Authorization: `Barear ${token}`,
+          },
+          method: "POST",
+        }
+      ).then((res) => res.json());
+      if (logoutResponse.hasOwnProperty("error")) {
+        throw new Error(logoutResponse.error);
+      }
       setToken(undefined);
       setIsLoggingOut(false);
       push("/");
     } catch (error) {
-      console.log(error);
+      setErrorMessage((error as Error).message);
       setIsLoggingOut(false);
     }
   };

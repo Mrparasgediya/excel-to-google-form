@@ -7,10 +7,6 @@ const FormFieldDetails: FC<{ formField: IFormItem; fieldNo: number }> = ({
   formField: { type, extra: { required, ...otherExtraProps } = {}, title },
   fieldNo,
 }) => {
-  useEffect(() => {
-    // console.log(formField.extra);
-  }, []);
-
   return (
     <div className="space-y-1">
       <h3 className="font-semibold">Field {fieldNo}:</h3>

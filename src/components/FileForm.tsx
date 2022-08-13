@@ -1,5 +1,6 @@
 import config from "config";
 import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
+import ErrorContext from "contexts/Error/ErrorContext";
 import FileContext from "contexts/file/FileContext";
 import TokenContext from "contexts/token/TokenContext";
 import { FormEventHandler, useContext, useRef, useState } from "react";
@@ -23,6 +24,10 @@ const FileForm = () => {
   } = useContext(TokenContext);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const {
+    actions: { setErrorMessage },
+  } = useContext(ErrorContext);
+
   const handleFormSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if (fileInputRef.current && fileInputRef.current.files) {
@@ -44,11 +49,12 @@ const FileForm = () => {
         setFileData(fileData);
         setCurrentStep("change");
       } catch (error) {
-        console.log(error);
+        setErrorMessage((error as Error).message);
       }
       toggleDisableLogout();
       toggelIsLoading();
     } else {
+      setErrorMessage("Please refresh The page");
     }
   };
 
