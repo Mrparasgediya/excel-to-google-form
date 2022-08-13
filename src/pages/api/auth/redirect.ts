@@ -24,7 +24,7 @@ const authRedirectGetHandler = async (req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Set-Cookie', serialize('token', userToken, { httpOnly: true, secure: true, path: '/', sameSite: 'strict', maxAge: (60 * 60) }))
         return res.redirect('/');
     } catch (error) {
-        return res.status(400).send({ message: (error as Error).message })
+        return res.status(400).send({ error: (error as Error).message })
     }
 }
 
@@ -33,7 +33,7 @@ const authRedirectHandler = async (req: NextApiRequest, res: NextApiResponse) =>
         case 'GET':
             return authRedirectGetHandler(req, res);
         default:
-            return res.status(405).send({ message: `Method ${req.method} is not allowed!` })
+            return res.status(405).send({ error: `Method ${req.method} is not allowed!` })
     }
 }
 
