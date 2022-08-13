@@ -10,6 +10,6 @@
     @apply bg-white/70 border border-white;
   }
   .glass--red {
-    @apply bg-red-600/70 border-red-500 text-white;
+    @apply bg-red-600/90 border-red-500 text-white;
   }
 }

@@ -4,6 +4,7 @@ import ErrorContext from "contexts/Error/ErrorContext";
 import FileContext from "contexts/file/FileContext";
 import TokenContext from "contexts/token/TokenContext";
 import { FormEventHandler, useContext, useRef, useState } from "react";
+import { IFetchResponse } from "types/fetch.types";
 import { IFormItem } from "types/file";
 import Button from "./Button";
 import FileInput from "./FileInput";
@@ -37,15 +38,22 @@ const FileForm = () => {
       toggelIsLoading();
       toggleDisableLogout();
       try {
-        const res = await fetch(`${config.FETCH_BASE_URL}/api/file/upload`, {
-          body: formdata,
-          method: "POST",
-          headers: new Headers({
-            Authorization: `Barear ${token}`,
-          }),
-        });
-        const response = await res.json();
-        const fileData: IFormItem[] = response.readOutput;
+        const uploadResponse: IFetchResponse = await fetch(
+          `${config.FETCH_BASE_URL}/api/file/upload`,
+          {
+            body: formdata,
+            method: "POST",
+            headers: new Headers({
+              Authorization: `Barear ${token}`,
+            }),
+          }
+        ).then((res) => res.json());
+
+        if (uploadResponse.error) {
+          throw new Error(uploadResponse.error);
+        }
+
+        const fileData: IFormItem[] = uploadResponse.readOutput;
         setFileData(fileData);
         setCurrentStep("change");
       } catch (error) {

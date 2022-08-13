@@ -5,7 +5,9 @@ import ErrorContext from "./ErrorContext";
 const ErrorContextProvider: FC<{ children: ChildrenComponent }> = ({
   children,
 }) => {
-  const [errorMessage, setErrorMessage] = useState<string | null>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(
+    "this is me "
+  );
   let timeoutValueRef: RefObject<{
     value: any;
   }> = useRef({ value: 0 });

@@ -5,7 +5,7 @@ const tokenHandler = (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
             return res.send({ token: req.cookies.token });
         default:
-            return res.status(405).send({ message: `Method ${req.method} is not Allowed!` });
+            return res.status(405).send({ error: `Method ${req.method} is not Allowed!` });
     }
 }
 export default tokenHandler;

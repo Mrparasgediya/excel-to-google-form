@@ -20,7 +20,7 @@ const fileUploadGetHandler = async (req: FileNextApiRequest, res: NextApiRespons
         const readOutput = readWorksheet(workSheet);
         return res.send({ readOutput });
     } catch (error) {
-        return res.status(400).send({ message: (error as Error).message })
+        return res.status(400).send({ error: (error as Error).message })
     }
 }
 
@@ -30,7 +30,7 @@ const fileUploadHandler = (req: FileNextApiRequest, res: NextApiResponse) => {
         case "POST":
             return fileUploadGetHandler(req, res);
         default:
-            return res.send({ message: `Method ${req.method} is not Allowed!` });
+            return res.send({ error: `Method ${req.method} is not Allowed!` });
     }
 }
 

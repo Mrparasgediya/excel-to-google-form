@@ -22,6 +22,8 @@ const Button: FC<{
   hasShadows = true,
   ...otherProps
 }) => {
+  let defaultStyles = "focus:ring-2";
+
   let colorStyles =
     "bg-indigo-500 shadow-indigo-400/80  hover:bg-indigo-500/80 disabled:bg-indigo-300 focus:ring-indigo-400";
   if (color && color === "fuchsia") {
@@ -42,9 +44,11 @@ const Button: FC<{
 
   return (
     <button
-      className={`text-white text-md flex items-center gap-1 px-2 py-1 rounded-md font-medium shadow-md transition-all ease-in active:transform active:scale-95 active:shadow disabled:cursor-not-allowed focus:ring-2 focus:outline-none ${
+      className={`text-white text-md flex items-center gap-1 px-2 py-1 rounded-md font-medium shadow-md transition-all ease-in active:transform active:scale-95 active:shadow disabled:cursor-not-allowed focus:outline-none ${
         classes || ""
-      } ${colorStyles} ${!hasShadows ? "shadow-none active:shadow-none" : ""} `}
+      } ${colorStyles} ${color !== "transparent" ? defaultStyles : ""} ${
+        !hasShadows ? "shadow-none active:shadow-none" : ""
+      } `}
       disabled={!!isLoading || disabled}
       onClick={otherProps.onClick}
     >
