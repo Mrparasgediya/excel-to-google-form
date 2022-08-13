@@ -34,7 +34,7 @@ const formPostHandler = async (req: AuthNextApiRequest, res: NextApiResponse) =>
         return res.send(response);
 
     } catch (error) {
-        return res.send({ message: (error as Error).message })
+        return res.send({ error: (error as Error).message })
     }
 }
 
@@ -43,7 +43,7 @@ const formHandler = async (req: AuthNextApiRequest, res: NextApiResponse) => {
         case 'POST':
             return formPostHandler(req, res);
         default:
-            return res.send({ message: `Method ${req.method} not Allowed!` });
+            return res.send({ error: `Method ${req.method} not Allowed!` });
     }
 }
 

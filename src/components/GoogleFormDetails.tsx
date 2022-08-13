@@ -14,6 +14,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { IFetchResponse } from "types/fetch.types";
 import Button from "./Button";
 import FormInput from "./FormInput";
 
@@ -54,24 +55,31 @@ const GoogleFormDetails = () => {
         toggleDisableLogout();
         if (!documentTitle || !title)
           throw new Error("Enter valid form details");
-        const res = await fetch(`${config.FETCH_BASE_URL}/api/form/create`, {
-          method: "POST",
-          body: JSON.stringify({
-            title: title,
-            documentTitle: documentTitle,
-          }),
-          headers: new Headers({
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Barear ${token}`,
-          }),
-        });
-        const response = await res.json();
+        const createFormResponse: IFetchResponse = await fetch(
+          `${config.FETCH_BASE_URL}/api/form/create`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              title: title,
+              documentTitle: documentTitle,
+            }),
+            headers: new Headers({
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `Barear ${token}`,
+            }),
+          }
+        ).then((res) => res.json());
+
+        if (createFormResponse.error) {
+          throw new Error(createFormResponse.error);
+        }
+
         setFormDetails({
           documentTitle,
           title,
-          formId: response.formId,
-          formUrl: response.responderUri,
+          formId: createFormResponse.formId,
+          formUrl: createFormResponse.responderUri,
         } as IFormDetails);
         titleInputRef.current.value = "";
         documentTitleInputRef.current.value = "";
