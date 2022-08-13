@@ -1,9 +1,6 @@
 import FileContext, { IFileContext } from "contexts/file/FileContext";
-import { useContext, useEffect } from "react";
-import { dataTypes } from "types/file";
-import { getFullTypeOfFileType } from "utils/file";
+import { useContext } from "react";
 import Button from "./Button";
-import DynamiOptions from "./DynamiOptions";
 import FormFieldDetails from "./FormFieldDetails";
 
 const FormFieldsDetailsList = () => {
