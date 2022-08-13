@@ -7,6 +7,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import config from "config";
 import DisableLogoutContext from "contexts/disableLogout/DisableLogoutContext";
 import ErrorContext from "contexts/Error/ErrorContext";
+import { IFetchResponse } from "types/fetch.types";
 
 const AddFormFields = () => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
@@ -38,15 +39,23 @@ const AddFormFields = () => {
       toggelIsLoading();
       toggleDisableLogout();
 
-      await fetch(`${config.FETCH_BASE_URL}/api/form/${formId}/fields`, {
-        method: "PUT",
-        body: JSON.stringify({ fields: fileData }),
-        headers: new Headers({
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Barear ${token}`,
-        }),
-      });
+      const fieldsResponse: IFetchResponse = await fetch(
+        `${config.FETCH_BASE_URL}/api/form/${formId}/fields`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ fields: fileData }),
+          headers: new Headers({
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Barear ${token}`,
+          }),
+        }
+      ).then((res) => res.json());
+
+      if (fieldsResponse.error) {
+        throw new Error(fieldsResponse.error);
+      }
+
       toggelIsLoading();
       setIsCompleted(true);
       toggleDisableLogout();

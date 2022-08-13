@@ -26,7 +26,7 @@ const formFieldsPutHandler = async (req: AuthNextApiRequest, res: NextApiRespons
         }
         return res.send({ message: "Form fields added successfully!" })
     } catch (error) {
-        return res.status(400).send({ message: (error as Error).message })
+        return res.status(400).send({ error: (error as Error).message })
     }
 }
 
@@ -35,7 +35,7 @@ const formFieldsHandler = async (req: AuthNextApiRequest, res: NextApiResponse) 
         case 'PUT':
             return formFieldsPutHandler(req, res);
         default:
-            return res.status(400).send({ message: `Method ${req.method} is not Allowed!` })
+            return res.status(400).send({ error: `Method ${req.method} is not Allowed!` })
     }
 }
 
