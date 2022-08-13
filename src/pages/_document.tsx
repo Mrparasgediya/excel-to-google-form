@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html>
       <Head />
-      <body className="text-gray-900 bg-gradient-to-r from-cyan-500 to-blue-500  bg-repeate min-h-screen">
+      <body className="py-14 text-gray-900 bg-gradient-to-r from-cyan-500 to-blue-500  bg-repeate min-h-[calc(100vh-7rem)]">
         <Main />
         <NextScript />
       </body>
