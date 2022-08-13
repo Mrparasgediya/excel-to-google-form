@@ -15,6 +15,7 @@ const authMiddleware = async (req: AuthNextApiRequest, res: NextApiResponse, nex
         const token: VerifiedJWTPayload = verifyJWT(reqHeader.split(" ")[1]);
         // get auth client
         const authClient: OAuth2Client = getOAuthClient();
+        if (!authClient) throw new Error("Enter valid token");
         // set authclient credentials from token
         authClient.setCredentials({ access_token: (token as JwtPayload).token })
         // set req.auth to authclient
