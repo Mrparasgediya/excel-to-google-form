@@ -69,8 +69,8 @@
 ## Sample Excel File    
 > This is sample excel file to create google form to get customer details of hotel
 ![Sample Excel file to create google form](./src/images/sample-excel-file.png)
-[Google Form From This sample excel file](https://docs.google.com/forms/d/e/1FAIpQLScQyTJz7cgEa48gpc2O4zfdBaFH7wag6tXiVvMP-R-Fi0VmHA/viewform)
-
+> Google form of given sample given file
+![Sample Excel file to create google form](./src/images/sample-google-form.png)
 
 
 
