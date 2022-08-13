@@ -40,6 +40,7 @@
 
 - Text, Number, Date :
     - it will automatic detected from entries that you entered
+    - **Note:** it will authomaticaly choose highest occurance of data type if entries has data with multiple data types
 - Radio:
     - You need to add t=radio to second row
     - Add radio options to following column after second row
