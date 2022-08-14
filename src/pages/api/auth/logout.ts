@@ -1,5 +1,4 @@
 import { NextApiResponse } from "next"
-import https from 'https'
 import { serialize } from 'cookie'
 import authMiddleware from "middlewares/auth.middleware";
 import { AuthNextApiRequest } from "types/req.types";
@@ -9,33 +8,13 @@ const logoutGetRequestHandler = async (req: AuthNextApiRequest, res: NextApiResp
     try {
         // run middleware
         await runMiddleware(req, res, authMiddleware)
-        // Build the string for the POST request
-        let postData = "token=" + req.auth.credentials.access_token;
-        // post options to revoke all of the access which are used in this website
-        let postOptions = {
-            host: 'oauth2.googleapis.com',
-            port: '443',
-            path: '/revoke',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': Buffer.byteLength(postData)
-            }
-        };
 
-        const postReq = https.request(postOptions, function (res) {
-            res.setEncoding('utf8');
-            // calls when data is get
-            res.on('data', d => {
-            });
-        });
-
-        postReq.on('error', error => {
-            throw new Error((error as Error).message);
-        });
-
-        postReq.write(postData);
-        postReq.end();
+        // revoke access from token
+        await fetch('https://oauth2.googleapis.com/revoke', {
+            method: "POST",
+            body: JSON.stringify({ token: req.auth.credentials.access_token })
+        })
+        // remove cookie from client side
         res.setHeader(
             "Set-Cookie",
             [
@@ -48,6 +27,7 @@ const logoutGetRequestHandler = async (req: AuthNextApiRequest, res: NextApiResp
                 })
             ]
         );
+
         return res.send({ message: "Logout Successfully" });
     } catch (error) {
         return res.status(400).send({ error: (error as Error).message })
