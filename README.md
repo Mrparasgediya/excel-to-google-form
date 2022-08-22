@@ -1,7 +1,6 @@
 # excel-to-google-form
 
 > This is web app to convert excel file to google form
-### **(Note: This app is under development so if you want to use this facility then you need to send your email to gediyaparas103@gmail.com to become tester)**
 ## Steps to Convert Excel to Google form
 
 - Step 1:
