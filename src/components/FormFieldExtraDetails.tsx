@@ -1,6 +1,6 @@
 import React, { FC, Fragment } from "react";
 import { dataTypes, IFormExtraFields } from "types/file";
-import DynamiOptions from "./DynamiOptions";
+import DynamicOptions from "./DynamicOptions";
 
 const FieldDetailsWithInlineOptions: FC<{
   title: string;
@@ -9,7 +9,7 @@ const FieldDetailsWithInlineOptions: FC<{
   return (
     <div className="flex items-center gap-2">
       <div className="w-3/12">{title}</div>
-      <DynamiOptions
+      <DynamicOptions
         classes="flex-1"
         options={options}
         optionsTitle={`All ${title}`}

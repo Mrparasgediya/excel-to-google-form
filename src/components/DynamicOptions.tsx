@@ -1,9 +1,6 @@
 import { FC, Fragment, useState } from "react";
-import Button from "./Button";
-import PencilIcon from "./PencilIcon";
-import TrashIcon from "./TrashIcon";
 
-const DynamiOptions: FC<{
+const DynamicOptions: FC<{
   optionsTitle?: string;
   options: string[];
   classes?: string;
@@ -41,12 +38,6 @@ const DynamiOptions: FC<{
               className="h-10 px-2 py-1 rounded-none border-0 border-b border-b-gray-400 last:border-0 flex items-center gap-1 hover:bg-white/90 transition-colors ease-in"
             >
               <span className="flex-1 text-sm">{currOption}</span>
-              {/* <Button color="green" hasShadows={false}>
-                  <PencilIcon />
-                </Button>
-                <Button color="red" hasShadows={false}>
-                  <TrashIcon />
-                </Button> */}
             </div>
           ))}
         </div>
@@ -55,4 +46,4 @@ const DynamiOptions: FC<{
   );
 };
 
-export default DynamiOptions;
+export default DynamicOptions;
