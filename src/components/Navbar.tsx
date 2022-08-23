@@ -1,7 +1,14 @@
 import Button from "./Button";
 import NextLink from "next/link";
 import Container from "./Container";
-import { Fragment, MouseEventHandler, useContext, useState } from "react";
+import {
+  Fragment,
+  MouseEventHandler,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import TokenContext from "contexts/token/TokenContext";
 import { NextRouter, useRouter } from "next/router";
 import ButtonLink from "./ButtonLink";
@@ -18,6 +25,7 @@ const Navbar = () => {
   const {
     state: { isLogoutDisabled },
   } = useContext(DisableLogoutContext);
+  const titleRef = useRef<HTMLAnchorElement>(null);
 
   const { asPath, push }: NextRouter = useRouter();
 
@@ -25,6 +33,15 @@ const Navbar = () => {
   const {
     actions: { setErrorMessage },
   } = useContext(ErrorContext);
+
+  useEffect(() => {
+    if (screen.width >= 768 && titleRef.current) {
+      // add converter text if it is not mobile device
+      if (!/converter/gi.test(titleRef.current.textContent!)) {
+        titleRef.current.textContent = `${titleRef.current.textContent} Converter`;
+      }
+    }
+  }, []);
 
   const handleLogoutClick: MouseEventHandler<HTMLButtonElement> = async () => {
     try {
@@ -52,9 +69,13 @@ const Navbar = () => {
   };
   return (
     <nav className="h-14 bg-white/75 backdrop-blur-lg flex items-center justify-center shadow-md shadow-blue-500/20 fixed border-2 w-full top-0 left-0 z-50">
-      <Container classes={`flex items-center justify-between`}>
+      <Container
+        classes={`flex items-center justify-between w-11/12 sm:w-8/12`}
+      >
         <h1 className="font-semibold text-xl">
-          <NextLink href="/">Excel To Google Form Converter</NextLink>
+          <NextLink href="/" passHref>
+            <a ref={titleRef}>Excel To Google Form</a>
+          </NextLink>
         </h1>
         {!asPath.endsWith("login") ? (
           !!token ? (

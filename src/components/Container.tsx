@@ -8,7 +8,7 @@ const Container: FC<{ children: ChildrenComponent; classes?: string }> = ({
   return (
     <div
       className={`${
-        classes && classes.includes("w-") ? "" : "w-8/12"
+        classes && classes.includes("w-") ? "" : "w-10/12 md:w-8/12"
       } mx-auto ${classes || ""}`}
     >
       {children}

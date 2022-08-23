@@ -17,7 +17,9 @@ const ConvertPage: FC<{ token: string }> = ({ token }) => {
   return (
     <div className="flex items-center flex-col gap-6">
       <div className="flex items-center gap-2 justify-between w-full max-w-md">
-        <h2 className="text-3xl font-medium">Select file to convert</h2>
+        <h2 className="text-2xl md:text-3xl font-medium">
+          Select file to convert
+        </h2>
         <Button
           onClick={reset}
           disabled={

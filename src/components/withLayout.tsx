@@ -4,7 +4,6 @@ import Container from "./Container";
 import Navbar from "./Navbar";
 import config from "config";
 import ErrorContext from "contexts/Error/ErrorContext";
-import Button from "./Button";
 import ErrorNotification from "./ErrorNotification";
 
 const withLayout = <P extends object>(
